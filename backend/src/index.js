@@ -51,16 +51,20 @@ app.use('/api/runs', runRoutes);
 app.use('/api/health', healthRoutes);
 
 const path = require('path');
+const fs = require('fs');
 
-// ── Serve Frontend in Production ──────────────────────────
-if (process.env.NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '../../frontend/dist');
+// ── Serve Frontend (unified deployment) ───────────────────
+const frontendDist = path.resolve(__dirname, '..', '..', 'frontend', 'dist');
+if (fs.existsSync(frontendDist)) {
+  console.log('Serving frontend from:', frontendDist);
   app.use(express.static(frontendDist));
 
   // Any request that doesn't match an API route gets the React app
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
+} else {
+  console.log('Frontend dist not found at:', frontendDist, '(skipping static serving)');
 }
 
 // Global error handler
