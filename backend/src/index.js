@@ -54,7 +54,7 @@ const path = require('path');
 
 // ── Serve Frontend in Production ──────────────────────────
 if (process.env.NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '../../../frontend/dist');
+  const frontendDist = path.join(__dirname, '../../frontend/dist');
   app.use(express.static(frontendDist));
 
   // Any request that doesn't match an API route gets the React app
