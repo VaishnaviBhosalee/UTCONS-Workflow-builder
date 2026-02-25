@@ -19,7 +19,21 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // ── Security headers ──────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  // Vite adds crossorigin to <script>/<link> tags — COEP blocks them
+  crossOriginEmbedderPolicy: false,
+  // Allow Google Fonts, inline styles, and Vite assets
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'"],
+    },
+  },
+}));
 
 // ── CORS ──────────────────────────────────────────────────
 const allowedOrigins = process.env.CORS_ORIGIN
@@ -29,7 +43,11 @@ const allowedOrigins = process.env.CORS_ORIGIN
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (Postman, curl, same-origin)
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin) return callback(null, true);
+    // Allow listed origins
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // In unified deployment (production), frontend is same-origin — allow it
+    if (process.env.NODE_ENV === 'production') return callback(null, true);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
