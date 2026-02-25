@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -50,7 +51,6 @@ app.use('/api/workflows', workflowRoutes);
 app.use('/api/runs', runRoutes);
 app.use('/api/health', healthRoutes);
 
-const path = require('path');
 const fs = require('fs');
 
 // ── Serve Frontend (unified deployment) ───────────────────

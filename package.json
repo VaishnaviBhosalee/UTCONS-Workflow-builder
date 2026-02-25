@@ -5,6 +5,6 @@
     "scripts": {
         "install": "npm install --prefix backend && npm install --include=dev --prefix frontend",
         "build": "npm run build --prefix frontend",
-        "start": "npm start --prefix backend"
+        "start": "node backend/src/index.js"
     }
 }
