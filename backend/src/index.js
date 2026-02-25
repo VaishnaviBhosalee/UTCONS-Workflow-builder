@@ -50,11 +50,6 @@ app.use('/api/workflows', workflowRoutes);
 app.use('/api/runs', runRoutes);
 app.use('/api/health', healthRoutes);
 
-// Root
-app.get('/', (req, res) => {
-  res.json({ message: 'Workflow Builder API is running' });
-});
-
 const path = require('path');
 
 // ── Serve Frontend in Production ──────────────────────────
