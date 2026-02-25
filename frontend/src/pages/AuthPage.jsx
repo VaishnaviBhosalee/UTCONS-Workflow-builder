@@ -59,7 +59,8 @@ export default function AuthPage() {
                 data.details.forEach((d) => { byField[d.field] = d.message })
                 setErrors(byField)
             } else {
-                setServerError(data?.error || 'Something went wrong. Please try again.')
+                const fallbackErr = data?.error || err.message || 'Something went wrong. Please try again.'
+                setServerError(typeof fallbackErr === 'string' ? fallbackErr : JSON.stringify(fallbackErr))
             }
         } finally {
             setLoading(false)

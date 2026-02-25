@@ -55,6 +55,19 @@ app.get('/', (req, res) => {
   res.json({ message: 'Workflow Builder API is running' });
 });
 
+const path = require('path');
+
+// ── Serve Frontend in Production ──────────────────────────
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '../../../frontend/dist');
+  app.use(express.static(frontendDist));
+
+  // Any request that doesn't match an API route gets the React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
