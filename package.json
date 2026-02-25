@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Unified deployment configuration for Render",
     "scripts": {
-        "install": "npm install --prefix backend && npm install --prefix frontend",
+        "install": "npm install --prefix backend && npm install --include=dev --prefix frontend",
         "build": "npm run build --prefix frontend",
         "start": "npm start --prefix backend"
     }
