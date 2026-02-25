@@ -1,10 +1,9 @@
 {
-    "name": "workflow-builder-unified",
+    "name": "workflow-builder",
     "version": "1.0.0",
-    "description": "Unified deployment configuration for Render",
+    "description": "Unified deployment — backend + frontend in one service",
     "scripts": {
-        "install": "npm install --prefix backend && npm install --include=dev --prefix frontend",
-        "build": "npm run build --prefix frontend",
+        "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
         "start": "node backend/src/index.js"
     }
 }
