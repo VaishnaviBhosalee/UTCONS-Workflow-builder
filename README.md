@@ -178,3 +178,54 @@ assessment-workflow/
 | POST   | `/api/runs`           | Execute `{workflowId, input}`        |
 | GET    | `/api/runs`           | Last 5 run records                   |
 | GET    | `/api/health`         | Service health check                 |
+
+---
+
+## Deploy to Render
+
+This project is configured for **unified deployment** on [Render](https://render.com) — the backend serves the frontend from a single Web Service.
+
+### 1. Push to GitHub
+
+Make sure your repo is pushed to GitHub (the `.gitignore` already excludes `.env`, `node_modules/`, and `dist/`).
+
+### 2. Create a Web Service on Render
+
+1. Go to [Render Dashboard](https://dashboard.render.com) → **New** → **Web Service**
+2. Connect your GitHub repo
+3. Configure:
+
+| Setting | Value |
+|---------|-------|
+| **Name** | `workflow-builder` (or any name) |
+| **Runtime** | Node |
+| **Build Command** | `npm run build` |
+| **Start Command** | `npm run start` |
+
+### 3. Set Environment Variables
+
+In the Render dashboard, add these env vars:
+
+| Variable | Value |
+|----------|-------|
+| `NODE_ENV` | `production` |
+| `MONGODB_URI` | Your MongoDB Atlas connection string |
+| `GEMINI_API_KEY` | Your Google Gemini API key |
+| `JWT_SECRET` | A strong random secret (use `openssl rand -hex 64`) |
+
+> **Note:** `CORS_ORIGIN` is not needed for unified deployment since the frontend is served from the same origin.
+
+### 4. Deploy
+
+Click **Create Web Service**. Render will:
+1. Run `npm run build` → installs backend + frontend deps, builds frontend to `frontend/dist/`
+2. Run `npm run start` → starts Express, which serves the API and the React app
+
+### 5. Verify
+
+Open your Render URL and check:
+- ✅ Auth page loads → register/login works
+- ✅ Create a workflow with 2+ steps
+- ✅ Run a pipeline → step outputs appear
+- ✅ History page shows the run
+- ✅ Health Dashboard → all 3 services "Operational"
